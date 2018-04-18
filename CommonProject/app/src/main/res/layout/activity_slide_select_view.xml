@@ -15,11 +15,14 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="60dp"
         android:clickable="true"
-        app:circleColor="#00ffff"
-        app:circleRadius="13dp"
-        app:lineColor="#ff00ff"
-        app:lineWidth="2dp"
+        app:circleColor="#4DBEFF"
+        app:outCircleColor="#D7F0FF"
+        app:circleRadius="16dp"
+        app:lineColor="#F0F7FF"
+        app:lineBgColor="#55CFFE"
+        app:lineWidth="5dp"
         app:slideTextColor="#333333"
+        app:slideSpacingExtra="10dp"
         app:slideTextSize="15sp" />
 
     <TextView

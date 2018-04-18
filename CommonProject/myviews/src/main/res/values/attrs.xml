@@ -5,7 +5,9 @@
         <attr name="lineWidth" format="dimension"/>
         <!--被选择文字的大小和颜色-->
         <attr name="circleColor" format="color|reference"/>
+        <attr name="outCircleColor" format="color|reference"/>
         <attr name="lineColor" format="color|reference"/>
+        <attr name="lineBgColor" format="color|reference"/>
 
         <attr name="slideTextSize" format="dimension"/>
         <attr name="slideTextColor" format="color|reference"/>

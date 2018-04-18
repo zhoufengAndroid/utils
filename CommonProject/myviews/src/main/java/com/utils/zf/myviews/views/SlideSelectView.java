@@ -1,6 +1,7 @@
 package com.utils.zf.myviews.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,7 +29,9 @@ public class SlideSelectView extends View {
     private float pointX;
     private int width;
     private int circleColor;
+    private int outCircleColor;
     private int lineColor;
+    private int lineBgColor;
     private float slideTextSize;
     private float slideSpacingExtra;
     private int slideTextColor;
@@ -47,22 +50,25 @@ public class SlideSelectView extends View {
 
     public SlideSelectView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TintTypedArray tta = TintTypedArray.obtainStyledAttributes(getContext(), attrs,
-                R.styleable.SlideSelectView);
+        TypedArray tta = context.obtainStyledAttributes(attrs, R.styleable.SlideSelectView);
         //两种字体颜色和字体大小
         radius = tta.getDimension(R.styleable.SlideSelectView_circleRadius, 5);
         lineWidth = tta.getDimension(R.styleable.SlideSelectView_lineWidth, 5);
         circleColor = tta.getColor(R.styleable.SlideSelectView_circleColor, Color.BLACK);
+        outCircleColor = tta.getColor(R.styleable.SlideSelectView_outCircleColor, Color.BLACK);
         lineColor = tta.getColor(R.styleable.SlideSelectView_lineColor, Color.BLACK);
+        lineBgColor = tta.getColor(R.styleable.SlideSelectView_lineBgColor, Color.BLACK);
         slideTextColor = tta.getColor(R.styleable.SlideSelectView_slideTextColor, Color.BLACK);
-        slideTextSize=tta.getDimension(R.styleable.SlideSelectView_slideTextSize,50);
-        slideSpacingExtra=tta.getDimension(R.styleable.SlideSelectView_slideSpacingExtra,10);
+        slideTextSize = tta.getDimension(R.styleable.SlideSelectView_slideTextSize, 50);
+        slideSpacingExtra = tta.getDimension(R.styleable.SlideSelectView_slideSpacingExtra, 10);
         initPaint(context);
     }
 
     private void initPaint(Context context) {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setColor(lineColor);
         mPaint.setStrokeWidth(lineWidth);
 
@@ -78,13 +84,13 @@ public class SlideSelectView extends View {
         anInt = width / (strings.length - 1);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         if (heightMode == MeasureSpec.AT_MOST) {
-            if (strings!=null&&strings.length!=0){
+            if (strings != null && strings.length != 0) {
                 Rect rect = new Rect();
                 textPaint.getTextBounds(strings[0], 0, strings[0].length(), rect);
                 //从矩形区域中读出文本内容的宽高
                 int centerTextHeight = rect.height();
-                heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (radius * 2 + centerTextHeight+slideSpacingExtra), heightMode);
-            }else {
+                heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (radius * 2 + centerTextHeight + slideSpacingExtra), heightMode);
+            } else {
                 heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (radius * 2 + 1), heightMode);
 
             }
@@ -100,7 +106,11 @@ public class SlideSelectView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setColor(lineColor);
         mPaint.setStrokeWidth(lineWidth);
-        canvas.drawLine(0, radius, width + radius * 2 - 1, radius, mPaint);
+        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        canvas.drawLine(10, radius, width + radius * 2 - 11, radius, mPaint);
+        mPaint.setColor(lineBgColor);
+        canvas.drawLine(10, radius, pointX > (width + radius * 2 - 11) ? (width + radius * 2 - 11) : pointX, radius, mPaint);
         drawCircle(canvas);
 
         Rect rect = new Rect();
@@ -112,13 +122,13 @@ public class SlideSelectView extends View {
             int centerTextHeight = rect.height();
 
             if (i == 0) {
-                canvas.drawText(text, 0, radius*2+slideSpacingExtra+centerTextHeight-5, textPaint);//绘制被选中文字，注意点是y坐标,是以文字底部为中心
+                canvas.drawText(text, 0, radius * 2 + slideSpacingExtra + centerTextHeight - 5, textPaint);//绘制被选中文字，注意点是y坐标,是以文字底部为中心
             } else if (i == strings.length - 1) {
                 canvas.drawText(text, getWidth() - centerTextWidth,
-                        radius*2+slideSpacingExtra+centerTextHeight-5, textPaint);//绘制被选中文字，注意点是y坐标,是以文字底部为中心
+                        radius * 2 + slideSpacingExtra + centerTextHeight - 5, textPaint);//绘制被选中文字，注意点是y坐标,是以文字底部为中心
             } else {
                 canvas.drawText(text, i * anInt - centerTextWidth / 2 + radius,
-                        radius*2+slideSpacingExtra+centerTextHeight-5, textPaint);//绘制被选中文字，注意点是y坐标,是以文字底部为中心
+                        radius * 2 + slideSpacingExtra + centerTextHeight - 5, textPaint);//绘制被选中文字，注意点是y坐标,是以文字底部为中心
             }
         }
 
@@ -161,8 +171,9 @@ public class SlideSelectView extends View {
 
     private void drawCircle(Canvas canvas) {
         mPaint.reset();
-        mPaint.setColor(circleColor);
         mPaint.setAntiAlias(true);
+
+        mPaint.setColor(outCircleColor);
         if (radius > pointX) {
             canvas.drawCircle(radius, radius, radius, mPaint);
         } else if (width > (pointX + radius)) {
@@ -170,6 +181,17 @@ public class SlideSelectView extends View {
         } else {
             canvas.drawCircle(width + radius, radius, radius, mPaint);
         }
+
+        mPaint.setColor(circleColor);
+        if (radius > pointX) {
+            canvas.drawCircle(radius, radius, radius/2, mPaint);
+        } else if (width > (pointX + radius)) {
+            canvas.drawCircle(pointX + radius, radius, radius/2, mPaint);
+        } else {
+            canvas.drawCircle(width + radius, radius, radius/2, mPaint);
+        }
+
+
 
         if (onSelectListener != null && isUp) {
             onSelectListener.onSelect(selectPoint);

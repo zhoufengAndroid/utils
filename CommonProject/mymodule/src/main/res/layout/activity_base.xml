@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".base.BaseActivity">
+    <FrameLayout
+        android:id="@+id/common_fl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <include layout="@layout/common_title_bar" />
+    </FrameLayout>
+    <com.classic.common.MultipleStatusView
+        android:id="@+id/common_multiple_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:emptyView="@layout/common_default_empty"
+        app:loadingView="@layout/common_default_loading"
+        app:noNetworkView="@layout/common_default_no_network">
+
+        <FrameLayout
+            android:id="@+id/common_fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.classic.common.MultipleStatusView>
+</LinearLayout>

@@ -7,13 +7,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.TintTypedArray;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.utils.zf.myviews.R;
+
 
 /**
  * Created by ZF on 2018/4/10.
@@ -94,7 +94,6 @@ public class SlideSelectView extends View {
                 heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (radius * 2 + 1), heightMode);
 
             }
-
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
@@ -173,6 +172,7 @@ public class SlideSelectView extends View {
         mPaint.reset();
         mPaint.setAntiAlias(true);
 
+        //绘制外部圆
         mPaint.setColor(outCircleColor);
         if (radius > pointX) {
             canvas.drawCircle(radius, radius, radius, mPaint);
@@ -182,19 +182,29 @@ public class SlideSelectView extends View {
             canvas.drawCircle(width + radius, radius, radius, mPaint);
         }
 
+        //绘制內部圆
         mPaint.setColor(circleColor);
         if (radius > pointX) {
-            canvas.drawCircle(radius, radius, radius/2, mPaint);
+            canvas.drawCircle(radius, radius, radius / 2, mPaint);
         } else if (width > (pointX + radius)) {
-            canvas.drawCircle(pointX + radius, radius, radius/2, mPaint);
+            canvas.drawCircle(pointX + radius, radius, radius / 2, mPaint);
         } else {
-            canvas.drawCircle(width + radius, radius, radius/2, mPaint);
+            canvas.drawCircle(width + radius, radius, radius / 2, mPaint);
         }
 
 
-
         if (onSelectListener != null && isUp) {
-            onSelectListener.onSelect(selectPoint);
+            if (selectPoint >= strings.length) {
+                onSelectListener.onSelect(strings.length - 1);
+            } else {
+                onSelectListener.onSelect(selectPoint);
+            }
+        }
+    }
+
+    public void initData(String[] strings) {
+        if (strings != null && strings.length != 0) {
+            this.strings = strings;
         }
     }
 
@@ -205,11 +215,19 @@ public class SlideSelectView extends View {
         return strings[selectPoint];
     }
 
-    private OnSelectListener onSelectListener;
+    public void setData(final int position) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                selectPoint = position;
+                pointX = position * anInt;
+                invalidate();
+            }
+        });
 
-    public OnSelectListener getOnSelectListener() {
-        return onSelectListener;
     }
+
+    private OnSelectListener onSelectListener;
 
     public void setOnSelectListener(OnSelectListener onSelectListener) {
         this.onSelectListener = onSelectListener;

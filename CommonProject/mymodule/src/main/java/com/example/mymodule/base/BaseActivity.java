@@ -15,7 +15,7 @@ import com.classic.common.MultipleStatusView;
 import com.example.mymodule.R;
 import com.example.mymodule.utils.HttpCode;
 
-public abstract class BaseActivity extends FragmentActivity implements UIBase {
+public abstract class BaseActivity<T extends BasePresenter> extends FragmentActivity implements UIBase {
 
     public View contentView;
     protected FrameLayout flTitleBar;
@@ -25,6 +25,7 @@ public abstract class BaseActivity extends FragmentActivity implements UIBase {
     protected TextView tvTitle;
     protected ImageView ivIconRight;
     protected TextView tvRightText;
+    protected BasePresenter presenter;
 
     private static final RelativeLayout.LayoutParams DEFAULT_LAYOUT_PARAMS =
             new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -44,7 +45,7 @@ public abstract class BaseActivity extends FragmentActivity implements UIBase {
         multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initData();
+                onPrepare();
             }
         });
         rlBack.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +58,11 @@ public abstract class BaseActivity extends FragmentActivity implements UIBase {
         flContent.addView(contentView);
         initView(savedInstanceState);
         initListener();
-        initData();
+        presenter=initPresenter();
+        onPrepare();
     }
+
+    protected abstract T initPresenter();
 
     public void setProgress() {
         try {

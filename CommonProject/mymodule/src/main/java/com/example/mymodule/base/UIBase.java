@@ -12,7 +12,7 @@ public interface UIBase {
 
     void initListener();
 
-    void initData();
+    void onPrepare();
 
     void toast(String msg);
 }

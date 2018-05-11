@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.mymodule.base.BaseActivity;
+import com.example.mymodule.base.BasePresenter;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<MainPresenter> {
 
     private TextView tvJumpSlideSelect;
 
@@ -21,7 +22,6 @@ public class MainActivity extends BaseActivity {
             }
         }
         startActivity(intent);
-
     }
 
     @Override
@@ -45,7 +45,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void initData() {
+    public void onPrepare() {
+        presenter.initData();
+    }
 
+    @Override
+    protected MainPresenter initPresenter() {
+        return new MainPresenter();
     }
 }

@@ -5,7 +5,7 @@ import com.example.mymodule.base.BasePresenter;
 public class MainPresenter extends BasePresenter implements IMainPresenter {
 
     @Override
-    protected void initData() {
+    public void initData() {
 
     }
 }

@@ -3,16 +3,14 @@ package com.utils.zf;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.mymodule.base.BaseActivity;
-import com.example.mymodule.base.BasePresenter;
 
 public class MainActivity extends BaseActivity<MainPresenter> {
 
-    private TextView tvJumpSlideSelect;
+    private TextView tvJumpSlideSelect,tvJumpRecyclerView;
 
     private void jump(Class cls, String[]keys, String [] values){
         Intent intent=new Intent(this,cls);
@@ -32,6 +30,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void initView(@Nullable Bundle savedInstanceState) {
         tvJumpSlideSelect = findViewById(R.id.tvJumpSlideSelect);
+        tvJumpRecyclerView = findViewById(R.id.tvJumpRecyclerView);
     }
 
     @Override
@@ -40,6 +39,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onClick(View view) {
                 jump(SlideSelectViewActivity.class,null,null);
+            }
+        });
+        tvJumpRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                jump(RecyclerViewActivity.class,null,null);
             }
         });
     }
